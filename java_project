@@ -1,0 +1,236 @@
+
+/**
+ * This class contains a number of different methods.
+ *
+ * @name: MAMAN 14_Ex14
+ * @author REEM ZER
+ * @version 17.05.21
+ */
+public class Ex14
+{
+    /**
+     **** question 1 ****
+     * This method return the highest drop between two numbers in the array.
+     * 
+     * @param a- The array obtained.
+     * @param Max- the highest number in the arry so far.
+     * @param MaxDrop- the highiest drop in the arry tso far.
+     * @return the highiest drop betwin tow numbers of the array.
+     */ 
+    public static int maximalDrop (int[] a)
+    {
+        int max = a[0];
+        int maxDrop = 0;
+    
+        for (int i = 1; i < a.length; i++)
+        {
+            // check if the number is biger then Max
+            if (a[i] > max)
+            {
+                max = a[i];
+            }
+            // check the high of the drop between the numbers. 
+            else if (max - a[i] > maxDrop)
+            {
+                maxDrop = max - a[i];
+            }
+        } //end of for loop
+        return maxDrop;
+        /**
+         * The time complexity is O(n)- The method run only one time on the arry.
+         * The space complexity is O(1) - you only working on the same array. 
+         */
+    }
+ 
+    
+    /**
+     **** question 2 ****
+     *  This method check if a "sink" is existing on given matrix.
+     *  "sink" - when all the numbers on the row are 0,
+     *  and in the column all the numbers are 1 [except the 'sink' himself he is a 0].
+     *  a sink can only be on row equals to column.
+     *  
+     *  @param mat- the matrix to check.
+     *  @parm rowSum- The sum of the limbs in a row
+     *  @parm colSum- The sum of the limbs in a col
+     *  @return the number of the row if there is sink or '-1' if there is no sink.
+     */
+    public static int isSink (int [][] mat)
+    {
+     int row = 0, col = 0 , rowSum = 0 ,colSum = 0;
+    
+     // check if there is  potential for "'0'  row" 
+     while(row < mat.length && col < mat.length)
+    {// The time complexity is O(n) - on the worst case it's run only on the length.
+       if(mat [row][col] == 0)
+           col++;
+       else
+           row++;
+    }// end of while loop
+        
+    if(row == mat.length)// 
+         return -1;//this is a corner- there is no 'sink'
+    else
+        col = row;
+        
+    // calculate the sum of the rows and columns
+    for(int i = 0 ; i < mat.length ; i++)
+    { // The time complexity is n - on the worst case its run only on he length.
+        rowSum += mat[row][i];
+        colSum+= mat[i][col];
+    }         
+    
+    // check if the sum allow 'sink'
+    if(colSum != mat.length - 1 || rowSum != 0) 
+        return - 1 ; 
+    else
+        return row;
+     /**
+     *The time complexity is O(n+n) = O(n);
+     *The space complexity is O(1) - you only working on the same array. 
+     **/ 
+    } // end of method isSink
+
+  
+   /**
+   **** question 3 ****
+   *  This method check if there is a 'stain'
+   *  A 'stain' is sequence full squares with a common side or a common vertex.
+   *  The size of the stain is the number of squares that make up the stain.
+   *  the method is checking the coppied array to keep To keep the original array unchanged
+   *  
+   *
+   *  @param mat- the matrix to check.
+   *  @param x- The array's row coordinate
+   *  @param y- The array's column coordinate
+   *  @parm matCopy- Copy the matrix on which we perform the calculations.
+   *  @return the result of method "Aize"
+   */
+
+  public static int size (boolean[][] mat, int x, int y)
+  {
+    // Create new array and copy the eleements using a dedicated function.
+    boolean [][] matCopy = new boolean [mat.length][mat[0].length];
+    copyTheArray (mat , matCopy , 0 , 0 );
+    
+    // return and call to the method that performs the calculation of the 'stain'
+    return ASize ( mat, matCopy, x , y);
+  }
+  
+    /**
+     *  this maethod calculates the size of the stain.
+     *  
+     *  @param x- The array's row coordinate
+     *  @param y- The array's column coordinate
+     *  @param mat- given array to be checked.
+     *  @return the size of the 'stain' or '0' if the cell is not part of any 'stain'.
+     */
+    private static int ASize (boolean[][] mat, boolean[][] matCopy,  int x, int y)
+    {
+    // Checks the validity of the coordinates.
+    if (x < 0 || x >= matCopy.length || y < 0 || y >=  matCopy[0].length)
+       return 0;
+    
+    // Checks if the cell is not part of any 'stain.
+    if (matCopy[x][y] != true)
+       return 0;
+    else 
+    { // calculates the size of the stain.
+      matCopy [x][y] = false;
+      return 1 + 
+      ASize (mat, matCopy ,x-1 ,y-1) + 
+      ASize(mat, matCopy , x-1,y)    +
+      ASize(mat, matCopy , x-1,y+1)  +
+      ASize(mat, matCopy , x,y+1)    +
+      ASize(mat, matCopy , x,y-1)    +
+      ASize(mat, matCopy , x+1,y-1)  +
+      ASize(mat, matCopy , x+1,y)    +
+      ASize(mat, matCopy , x+1,y+1) ;
+    }
+  }
+  
+  /**
+  * This method coppies the 'mat' array to 'copyMat' array.
+  * 
+  * @param mat- The array that is need to be coppied
+  * @param copyMat- The array that coppies
+  * @param i- Index of the rows
+  * @param j- Index of the columns
+  * @return 'true' if the array coppies the other.
+  */
+  private static boolean copyTheArray(boolean[][] mat, boolean[][] copyMat, int i,int j)
+  {
+   // Checks the validity of the coordinates.
+   if(i < copyMat.length && j < copyMat[0].length)
+        copyMat[i][j] = (mat[i][j]);
+        
+    // Perform the test to the end of the array using a recursive reading of the method
+   if(i == copyMat.length)
+       return true;
+   else if(j == copyMat[0].length)
+       return copyTheArray(mat ,copyMat ,i + 1,j = 0);
+   else
+       return copyTheArray(mat, copyMat, i ,j + 1);
+  }
+  
+  
+  /**
+   **** question 4 ****
+   * This method receives two arrays and checks whether there is permutation between them.
+   * The method should be recursive with no use of loops at all.
+   * The method coll to 'isAPermutation' method.
+   * 
+   * @param temp- a counter array.
+   * @param a- the first array
+   * @param b- the second array.
+   * @return the result of method 'isAPermutation'
+   */
+  public static boolean isPermutation (int [] a, int [] b)
+  {
+    // check if the size are equal.
+    if (a.length != b.length)
+      return false; 
+    else
+    {
+      int [] temp = new int [ a.length];
+      return isAPermutation (a, b, 0 , 0, temp);
+    }
+  }
+  
+  /**
+   * This method checking the permutation between the two arry.
+   * 
+   * @param temp- a counter array.
+   * @param a- the first array.
+   * @param b- the second array.
+   * @param i- a variable helped count the recurrent elements.
+   * @param j- a variable helped count the recurrent elements.
+   * @retern 'true' if the array is permutation.
+   */
+  public static boolean isAPermutation (int [] a, int [] b, int i , int j, int[] temp )
+  {
+     // Returns 'true' if we have gone through all the arrays successfully
+     if ( i == a.length )
+         return true;
+     
+     // Checks whether a member in place I is equal to a member in place J and counts repetitions
+     if (a[i] == b[j] && temp[j] == 0 )
+     {
+         temp[j] = 1;
+         return  isAPermutation (a,b, i + 1 , 0, temp);
+     }
+     //Increases J and checks fit for the following variables    
+     if (j < a.length - 1 )
+     {
+         return  isAPermutation (a ,b ,i, j + 1 , temp);
+     }// Returns false if we went through the whole array without result
+     else return false;
+     }
+  } 
+  
+  
+  
+  
+  
+  
+  
