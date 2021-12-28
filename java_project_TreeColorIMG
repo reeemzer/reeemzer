@@ -1,0 +1,413 @@
+     
+/**
+* This class represents an image definded by Color image using a two-dimensional
+* array of objects from the RGBColor class 
+*
+* @name: MAMAN 13_RGBImage
+* @author: REEM ZER
+* @version: 23.04.2021
+*/
+public class RGBImage
+{
+    // declarations
+    private RGBColor[][] _image;
+    
+    // construcor and methods definiitions
+    /**
+    * Construct a new Black RGBimage with the given number of rows and columns.
+    * @param rows-  the number of pixel rows in the image
+    * @param cols-  the number of pixel columns in the image
+    */
+    public RGBImage(int rows, int cols)
+    {
+        _image = new RGBColor[rows][cols];
+        
+        for (int i = 0; i < rows ; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                _image[i][j] = new RGBColor();
+            }
+        }
+    
+    }
+    
+    /**
+    * Construct a new image identical to the pixel array provided.
+    * @param pixels- the array of pixels used to the new image is made of.
+    */
+    public RGBImage (RGBColor[][] pixels)
+    {
+        _image = new RGBColor[pixels.length][pixels[0].length];
+        
+        for (int i = 0; i < this._image.length; i++)
+        {
+                for (int j = 0; j < this._image[i].length; j++)
+            {
+                _image[i][j] = new RGBColor(pixels[i][j]);
+            }
+    
+        }
+    }
+    
+    /**
+     * Construct a new image identical to the given image
+     * @param other the image to be copied
+     */
+    public RGBImage (RGBImage other)
+    {
+        _image = new RGBColor[other._image.length][other._image[0].length];
+        
+        for (int i = 0; i < other._image.length; i++)
+        {
+                for (int j = 0; j < other._image[0].length; j++)
+            {
+                this._image[i][j] = new RGBColor(other._image[i][j]);
+            }
+        }
+    }
+    
+    /**
+    * This method returns the hight of an image.
+    * 
+    */
+    public int getHeight()
+    {
+        return _image.length;
+    }
+    
+    /**
+    * This method returns the width of an image.
+    * 
+    */
+    public int getWidth()
+    {
+        return _image[0].length;
+    }
+    
+    /**
+    * This method returns the RGB values in the given location in the image.
+    * @param row- the row in which the wanted pixel is located.
+    * @param col- the column in which the wanted pixel is located.
+    */
+    public RGBColor getPixel (int row, int col)
+        {
+        // check if the pixel coordinates are in the image.
+        if (row >= getHeight() || row < 0 || col >= getWidth() || col < 0)
+            {
+            return new RGBColor();
+            }
+        else return new RGBColor(_image[row][col]);
+        }
+    
+    /**
+    * Sets the color in the specified location to be identical to the given pixel
+    * @param row- the row in which the pixel we want to set is located inside the image
+    * @param col- the column in which the pixel we want to set is located inside the image
+    * @param pixel- the pixel that we'll change the specified pixel inside the image to be identical to
+    */
+        public void setPixel(int row, int col, RGBColor pixel)
+    {
+        // check if the pixel coordinates are in the image.
+        if (row < this.getWidth() && col < this.getHeight() && col >= 0  && row >= 0)
+        {
+            this._image[row][col] = new RGBColor(pixel);
+        }
+    }
+    
+    /** 
+    * This method returns if the image is equal to other image.
+    * @param other The image to be compared with this image.
+    * @return true if the image is equal other image. 
+    */
+    public boolean equals (RGBImage other)
+    {
+        // check if the number of rows and columns are equal in both images.
+        if (getHeight() != other.getHeight() || getWidth() != other.getWidth()) 
+        {
+            return false;
+        }
+
+        for (int i = 0; i < getHeight(); i++)
+        {
+            for (int j = 0; j < getWidth(); j++)
+            {
+                if (!_image[i][j].equals(other._image[i][j])) //using the RGBColor method to check if equals
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    /**
+    * This method flip horizontal the image.
+    */
+    public void flipHorizontal()
+    {
+        RGBColor horizontaImage;
+        
+        for  (int i = 0 ; i < _image.length ; i++)
+            {
+                for (int j = 0 ; j < _image[i].length / 2; j ++ )
+                {
+                    horizontaImage = new RGBColor (_image[i][j]);
+                    _image[i][j] = new RGBColor (_image [i] [_image[i].length - i - 1]);
+                    _image [i] [_image[i].length - i - 1]  = new RGBColor(horizontaImage);  
+                }
+            }
+    }
+    
+    /**
+    * This method flip vertical the image.
+    */
+    public void flipVertical()
+    {
+        RGBColor verticalImage;
+        
+        for (int i = 0 ; i < _image.length/2; i++ )
+            {
+                for (int j = 0 ; j < (_image[i].length) ; j ++)
+                {
+                    verticalImage = new RGBColor (_image[i][j]);
+                    _image[i][j] = new RGBColor (_image [_image.length - i - 1] [j]);
+                    _image [_image.length - i - 1] [j] = new RGBColor(verticalImage);  
+                }
+            }
+    }
+    
+    /**
+    * This method invert the colors of every pixel to his complement.
+    */
+    public void invertColors()
+    {
+        // invert every pixel in the image to his complement.
+        for (int i = 0 ; i < _image.length; i++ )
+        {
+            for (int j = 0 ; j < (_image[i].length) ; j ++)
+            {
+                _image[i][j].invert();
+            }
+        }
+    }
+    
+    /**
+    * This method rotates an image clockwise.
+    */
+    public void rotateClockwise()
+    {
+         // determine the dimensions of the clockwise image.
+        RGBColor[][] _rotateImage = new RGBColor[getWidth()][getHeight()];
+        for (int i = 0; i < getHeight(); i++)
+        {
+            for (int j = 0; j < getWidth(); j++)
+            {
+                _rotateImage[j][getHeight() - 1 - i] = _image[i][j];
+            }
+        }
+        _image = _rotateImage;
+}
+    
+    /**
+    * This method rotates an image counter-clockwise.
+    */
+    public void rotateCounterClockwise()
+    {
+        // determine the dimensions of the counter-clockwise image.
+        RGBColor[][] _rotateImage = new RGBColor[getWidth()][getHeight()];
+        for (int i = 0; i < getHeight(); i++)
+        {
+            for (int j = 0; j < getWidth(); j++)
+            {
+                _rotateImage[getWidth() - 1 - j][i] = _image[i][j];
+            }
+        }
+
+        _image = _rotateImage;
+    }
+    
+    /**
+    * This method shifts the image right or left according to the offset. 
+    * @param offset- The amount of columns shift. 
+    */
+    public void shiftCol (int offset)
+    {
+             if (offset == 0 || Math.abs(offset) > getWidth()) //if  offset bigger than width, do nothing
+        {
+            return;
+        }
+        if (Math.abs(offset) == getWidth()) //if offset equals width set all image to black 
+        {
+            for (int i = 0; i < getHeight(); i++)
+            {
+                for (int j = 0; j < getWidth(); j++)
+                {
+                    _image[i][j].setRed(0);
+                    _image[i][j].setBlue(0);
+                    _image[i][j].setGreen(0);
+                }
+            }
+
+            return;
+        }
+
+        for (int i = 0; i < getHeight(); i++)
+        {
+            if (offset > 0) 
+            {
+                for (int j = getWidth() - 1; j >= offset; j--)
+                {
+                    _image[i][j] = _image[i][j - offset];
+                }
+            }
+            else
+            {
+                for (int j = 0; j < getWidth() + offset; j++)
+                {
+                    _image[i][j] = _image[i][j - offset];
+                }
+            }
+        }
+
+        for (int i = 0; i < getHeight(); i++)
+        {
+            if (offset > 0)
+            {
+                for (int j = 0; j < offset; j++)
+                {
+                    _image[i][j] = new RGBColor();
+                }
+            }
+            else
+            {
+                for (int j = getWidth() - 1; j >= getWidth() + offset; j--)
+                {
+                    _image[i][j] = new RGBColor();
+                }
+            }
+        }
+   }
+     
+    /**
+    * This method shifts the image down or up according to the offset. 
+    * @param offset The amount of rows shift. 
+    */
+    public void shiftRow (int offset)
+    {
+             if (offset == 0 || Math.abs(offset) > getHeight()) //if offset bigget than Height, do nothing
+        {
+            return;
+        }
+        if (Math.abs(offset) == getHeight()) //if offset equals height set all image to black 
+        {
+            for (int i = 0; i < getHeight(); i++)
+            {
+                for (int j = 0; j < getWidth(); j++)
+                {
+                    _image[i][j].setRed(0);
+                    _image[i][j].setBlue(0);
+                    _image[i][j].setGreen(0);
+                }
+            }
+
+            return;
+        }
+
+        for (int j = 0; j < getWidth(); j++)
+        {
+            if (offset > 0)
+            {
+                for (int i = getHeight() - 1; i >= offset; i--)
+                {
+                    _image[i][j] = _image[i - offset][j];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < getHeight() + offset; i++)
+                {
+                    _image[i][j] = _image[i - offset][j];
+                }
+            }
+        }
+
+        for (int j = 0; j < getWidth(); j++)
+        {
+            if (offset > 0)
+            {
+                for (int i = 0; i < offset; i++)
+                {
+                    _image[i][j] = new RGBColor();
+                }
+            }
+            else
+            {
+                for (int i = getHeight() - 1; i >= getHeight() + offset; i--)
+                {
+                    _image[i][j] = new RGBColor();
+                }
+            }
+        }
+     }
+    
+    /**
+    * This method return a grayscale representation of the image. 
+    * @return The grayscale representation of the image
+    */
+    public double[][] toGrayscaleArray()
+    {
+        double [][] _grayscaleArray = new double [_image.length] [_image[0].length];
+        
+        for (int i = 0; i < _image.length; i++)
+        {
+            for (int j = 0 ; j < _image[0].length; j++)
+            {
+                _grayscaleArray[i][j] = _image[i][j].convertToGrayscale();
+            }
+        }
+        return _grayscaleArray;
+    }
+    
+    /**
+    * This method return a string representation of the image.
+    * @return The string representation of the image.
+    */ 
+    public String toString()
+    {
+        String arrayText = " ";
+        
+        if (_image != null)
+        
+            for (int i = 0; i < _image.length; i++)
+            {
+                    for (int j = 0 ; j < _image[0].length -1; j++)
+                    {
+                        arrayText =  _image[i][j].toString() + " ";
+                    }
+                arrayText += "\n";
+            }
+        return arrayText;
+    }
+    
+    /**
+    * This method returns a copy of the array of pixels.
+    * @return The copy of the array of pixels.
+    */
+    public RGBColor[][] toRGBColorArray()
+    {
+        RGBColor[][] _toRgbcolorArray = new RGBColor [this._image.length][this._image[0].length];
+                
+        for(int i = 0; i < _toRgbcolorArray.length; i++)
+        {
+                for(int j =0; j < _toRgbcolorArray[i].length; j++)
+                {
+                    _toRgbcolorArray[i][j] = new RGBColor(_image[i][j]);
+                }
+        }
+        return _toRgbcolorArray;
+    }
+    }
+    
+        
