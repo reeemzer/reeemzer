@@ -1,6 +1,6 @@
 ### Hi there 👋, my name is Reem 
-#### I am a computer engineering student in the Open university
-Open for my first full time job!
+#### I am a computer engineering student in my 2 years on the Open university
+Open for my first full time job as a product or programmer!
 
 - 🔭 I’m currently working on 2141 club - an IDF Ex-Company Commanders Club
 - 🌱 I’m currently learning product management 
