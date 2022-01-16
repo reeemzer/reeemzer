@@ -1,0 +1,372 @@
+/**
+ *  object oriented programing (in java)
+ */
+public class Ex144 {
+    // -----------------------------------------------question 1------------------------------------------------------------
+    /**
+     * the function Gets users Array of numbers and playing a game which will make sure player one is winning or atlist geting a tie
+     * the array must have even amount of number and all numbers need to be above zero
+     * the game rules are simple:
+     * in ich round a player needs to chose one of the numbers in the edge
+     * the player with the higher score wins
+     *
+     * the function complicity of time is O(n)
+     * the function complicity of space is O(1) - the game is not cratering any new array or elements which is not defined
+     * private functions can be found in lines:105-213
+     * @param arr array of which the game will run on
+     */
+    public static void win (int[] arr){
+        //playing the game
+        runGame(evenOrOdd(arr),arr,"Amir","Tamar");
+    }
+    // -----------------------------------------------question 2------------------------------------------------------------
+    /**
+     * a)
+     * the function "what" returns true if the number given by the user is equal to the sub array of the array or all of the array
+     * b)
+     * the function complicity of time is O(n in the power of 3)
+     * d)
+     * the function complicity of time is O(n) because:
+     * the function run on the array only once to find if thar is a sub array that is equal to the number given by the user.
+     *
+     * @param a array of numbers
+     * @param num number given by user ti find if sub array is equal
+     * @return true \ false if sub array the machs this criteria is exciting
+     */
+
+    public static boolean what (int [] a,int num){
+        if(a.length == 0){
+            return false;
+        }
+        int sum = a[0];
+        int min = 0;
+        //checks if the first number in the array is equals the sum
+        if (sum == num){
+            return true;
+        }
+        //loop throw the array
+        for (int i = 1; i <= a.length;i++){
+            //checks if the current sum is larger then the number given to the function and while i is inside the array
+            while (sum > num && min < i){
+                //sum is subtracted by minimum index
+                sum -= a[min];
+                // adding one to minimum index
+                min++;
+            }
+            //checking if sum is equals number given by user
+            if(sum == num && min < i){
+                return true;
+            }
+            //if sum is not equals or larger then number given and i  is inside the array add array[i] number
+            if(i < a.length){
+                sum += a[i];
+            }
+
+        }
+        // if all else fails return false because thar is no sub array in the array that's equals the number given by the user
+        return false;
+
+    }
+    // -----------------------------------------------question 3------------------------------------------------------------
+
+    /**
+     * a function that's calculate the longest slop in a given 2D array
+     * rules:
+     * 1. the number  cannot be smaller then 1
+     * 2. the array must have numbers larger or equals to 0
+     * private functions can be found in lines:214-330
+     * @param mat the 2D array
+     * @param num the stub between jumps
+     * @return the largest slop option
+     */
+    public static int longestSlope(int [][] mat,int num){
+        return slopsLoop(mat,num,0,0,0);
+    }
+    // -----------------------------------------------question 4------------------------------------------------------------
+
+    /**
+     *  A function that calculate the amount of sorting options in a giving size of array and a maximum number (count start from 1)
+     *  the function is counting only upward array
+     * private functions can be found in lines:332-373
+     * @param n the array size
+     * @param max maximum number that is an option for a given place of array
+     * @return the total count
+     */
+    public static int howManySorted(int n, int max){
+        return maxLoop((n-1),max,1,0);
+    }
+
+
+    //--------------------------------------------------- Privet Functions ---------------------------------------------------------
+    // -----------------------------------------------question 1------------------------------------------------------------
+    /**
+     * the function gets array and returning true if the numbers in the even slots are bigger then the odd once and false otherwise
+     * the function complicity of time is O(n)
+     * the function complicity of space is O(1) - the game is not cratering any new array or elements which is not defined
+     * @param arr array that will be checked
+     * @return true if even and false if odd
+     */
+    private static boolean evenOrOdd(int[] arr){
+        // seating counters value
+        int sumEven = 0,sumOdd = 0;
+        //ruining on array
+        for (int i = 0; i<arr.length;i++){
+            //if slot is an even number
+            if (i%2 == 0){
+                // add to counter the number inside
+                sumEven += arr[i];
+            }
+            // else slot is in odd number
+            else {
+                // add to counter the number inside
+                sumOdd += arr[i];
+            }
+        }
+        //if the total of even numbers is bigger then the odd numbers return true
+        if (sumEven > sumOdd){
+
+            return true;
+        }
+        //else return false
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * the function plays the game
+     * the function requires: flag player one moves (even or odd) , array of the game, name of player one and name of player two
+     * the function complicity of time is O(n)
+     * the function complicity of space is O(1) - the game is not cratering any new array or elements which is not defined
+     * @param flag player one moves true = even numbers in the array else odd numbers
+     * @param arr the array on which the game is running
+     * @param playerOneName player one name
+     * @param playerTwoName player two name
+     */
+    private static void runGame(boolean flag , int[] arr ,String playerOneName,String playerTwoName){
+        //seating default values
+        int min = 0;
+        int max = arr.length-1;
+        int sumPlayerOne = 0;
+        int sumPlayerTwo = 0;
+        // loop of game rounds ends when no more moves is possible
+        while (min <max){
+            //if player one needs to move in even numbers in slots of the array
+            if(flag){
+                //checking if minimum slot is an even number
+                if (min % 2 == 0){
+                    //adding to the total score of player one
+                    sumPlayerOne += arr[min];
+                    //printing the decision
+                    System.out.println(playerOneName + " took "+arr[min] );
+                    //adding to minimum counter
+                    min ++;
+                }
+                else {
+                    //adding to the total score of player one
+                    sumPlayerOne += arr[max];
+                    //printing the decision
+                    System.out.println(playerOneName + " took "+arr[max] );
+                    //subtracting one to the maximum  counter
+                    max --;
+                }
+            }
+            //if player one needs to move in odd numbers in slots of the array
+            else {
+                //checking if minimum slot is not an even number
+                if (min % 2 != 0){
+                    //adding to the total score of player one
+                    sumPlayerOne += arr[min];
+                    //printing the decision
+                    System.out.println(playerOneName + " took "+arr[min] );
+                    //adding to minimum counter
+                    min ++;
+                }
+                else {
+                    //adding to the total score of player one
+                    sumPlayerOne += arr[max];
+                    //printing the decision
+                    System.out.println(playerOneName + " took "+arr[max] );
+                    //subtracting one to the maximum counter
+                    max --;
+                }
+
+            }
+            //checking for player two which number in the array (in play
+            if (arr[min] > arr[max]){
+                sumPlayerTwo += arr[min];
+                System.out.println(playerTwoName + " took "+arr[min] );
+                min ++;
+            }
+            else {
+                sumPlayerTwo += arr[max];
+                System.out.println(playerTwoName + " took "+arr[max] );
+                max --;
+            }
+        }
+        System.out.println("Final Score:\n"+playerOneName + " total " + sumPlayerOne +"\n"+playerTwoName+" total "+sumPlayerTwo);
+    }
+    // -----------------------------------------------question 3------------------------------------------------------------
+
+    /**
+     * main slope finder runs trow the 2D array and call slope counter to count the options if any exciting
+     * @param array the array that was given by the user
+     * @param num the stub size
+     * @param rows the row flag
+     * @param calms the calms flag
+     * @param maxSum maximum slope found until now
+     * @return the largest slope found in the array
+     */
+    private static int slopsLoop(int[][] array,int num,int rows,int calms,int maxSum){
+        // checks end condition if true means that we finished goring trow the array
+        if(rows == array.length){
+            return maxSum;
+        }
+        //checking if end of calm was riced if true gow one row down
+        if (calms == array[0].length){
+            return slopsLoop(array,num,(rows+1),0,maxSum);
+        }
+        //setting a temporary sum holder
+        int tempSum;
+        //checks all options from the current place
+        tempSum = slopsCounter(array,num,rows,calms);
+        // if temporary sum is bigger then the general sum put temporary in general
+        if (tempSum > maxSum){
+            maxSum = tempSum;
+        }
+        //continue loop
+        return slopsLoop(array,num,rows,(calms+1),maxSum);
+
+    }
+
+    /**
+     * slope counter that checks any moving option in the current place (from original slope counter)
+     * @param array the array that was given by the user
+     * @param num the stub size
+     * @param rows the row flag
+     * @param calms the calms flag
+     * @return the maximum slope found in the current place
+     */
+    private static int slopsCounter(int[][] array, int num , int rows, int calms){
+        int check,total = 0;
+        int coherentNumberToCheck = array[rows][calms];
+        //checking slop if going up
+        check = slopsCounter(array,num,(rows - 1),calms,0,coherentNumberToCheck);
+        //if bigger then total replace total
+        if (total < check){
+            total = check;
+        }
+        //checking slop if going down
+        check = slopsCounter(array,num,(rows + 1),calms,0,coherentNumberToCheck);
+        //if bigger then total replace total
+        if (total < check){
+            total = check;
+        }
+        //checking slop if going right
+        check = slopsCounter(array,num,rows,(calms + 1),0,coherentNumberToCheck);
+        //if bigger then total replace total
+        if (total < check){
+            total = check;
+        }
+        //checking slop if going left
+        check = slopsCounter(array,num,rows,(calms - 1),0,coherentNumberToCheck);
+        //if bigger then total replace total
+        if (total < check){
+            total = check;
+        }
+        //returns larges slope
+        return 1+total;
+
+    }
+
+    /**
+     *checking slope options for specific place and direction
+     * @param array the array that was given by the user
+     * @param num the stub size
+     * @param rows the row flag
+     * @param calms the calms flag
+     * @param sum the sum of the slope (Counter)
+     * @param oldNum original number in the place before this one
+     * @return  largest slope from original point
+     */
+    private static int slopsCounter (int[][] array, int num , int rows, int calms , int sum ,int oldNum){
+        // if edge case is true return 0 no more moves available
+        if (rows >= array.length || calms >= array[0].length || rows < 0 || calms < 0){
+            return 0;
+        }
+        // if slope is possible  (the stub size between the numbers)
+        if(oldNum - array[rows][calms] == num && array[rows][calms] > 0 )
+        {
+            int temp;
+            //checks option one (moving one row up and calling slopsCounter
+            temp = slopsCounter(array,num,(rows+1),calms, sum,array[rows][calms]);
+            //if sum is smaller then temp change sum
+            if (sum < temp)
+                sum = temp;
+            //checks option two (moving one row down and calling slopsCounter
+            temp = slopsCounter(array,num,(rows-1),calms, sum,array[rows][calms]);
+            //if sum is smaller then temp change sum
+            if (sum < temp)
+                sum = temp;
+            //checks option two (moving one calm right and calling slopsCounter
+            temp = slopsCounter(array,num,rows,(calms+1), sum,array[rows][calms]);
+            if (sum < temp)
+                sum = temp;
+            //checks option two (moving one calm left and calling slopsCounter
+            temp = slopsCounter(array,num,rows,(calms-1), sum,array[rows][calms]);
+            //if sum is smaller then temp change sum
+            if (sum < temp)
+                sum = temp;
+            //return largest slope from original testing  + 1 for the current one
+            return 1 + sum;
+        }
+        //else the current jump is not legitimate slope
+        return 0;
+    }
+
+    // -----------------------------------------------question 4------------------------------------------------------------
+
+    /**
+     * Master loop manages the loop throw maximum number from 1 to max
+     * @param arrayCounter the array length from the end to the start
+     * @param max Maximum number
+     * @param maxCounter a counter to max (checks from one to max)
+     * @param total master counter
+     * @return the total count in this max and place of the array
+     */
+    private static int maxLoop(int arrayCounter, int max,int maxCounter, int total){
+        //as long the loop is not over (while loop)
+        if(maxCounter <= max){
+            //count total with array loop
+            total = arrayLoop(arrayCounter,maxCounter,total);
+            //return recursive loop with the new total
+            return maxLoop(arrayCounter,max,(maxCounter+1),total);
+        }
+        //the while loop is over return total count
+        return total;
+    }
+
+    /**
+     * array loop goes from the end to start  and count options in current maximum
+     * @param arrayLength current place in array (from end to start)
+     * @param maxCounter //current maximum option
+     * @param total sum of total options
+     * @return in the end the count of option in this stage
+     */
+    private static int arrayLoop(int arrayLength, int maxCounter, int total){
+        //if loop is not over
+        if(arrayLength > 0){
+            // call max loop in array place -1 and maximum of current max
+            return maxLoop((arrayLength-1),maxCounter,1,total);
+        }
+        // if array in over return total +1 for this count which is over by now...
+        if (arrayLength==0){
+            return (total+1);
+        }
+        // edge case never riches to this point if array length is above 0 form origin (as it should!)
+        return total;
+    }
+
+
+}
